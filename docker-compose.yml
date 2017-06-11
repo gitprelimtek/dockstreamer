@@ -1,0 +1,43 @@
+version: "2"
+
+services:
+    pyweb:
+       build: ./pyweb
+       ports:
+         - "8080"
+       links:
+           - pyspark
+           - kafka
+       networks:
+           - front-end
+
+    pyspark:
+       build: ./pyspark/.
+       hostname: pyspark
+       links: 
+           - kafka
+       networks:
+           - back-end
+   
+    kafka:
+       image: spotify/kafka
+       volumes: 
+           - ./kafka:/kafka
+       ports: 
+           - "9092:9092" 
+       environment:
+          - ADVERTISED_HOST=0.0.0.0 
+          - ADVERTISED_PORT=9092
+          - CONSUMER_THREADS=1
+          - TOPICS=tweet-topic,processed-topic 
+          - ZK_CONNECT=kafka7zookeeper:2181/root/path
+          - GROUP_ID=mymirror
+#       command:
+#          - spotify/kafka
+ 
+       networks:
+           - back-end
+ 
+networks:
+       front-end:
+       back-end:
