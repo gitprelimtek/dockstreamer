@@ -28,7 +28,7 @@ services:
        environment:
           - ADVERTISED_HOST=0.0.0.0 
           - ADVERTISED_PORT=9092
-          - CONSUMER_THREADS=1
+          - CONSUMER_THREADS=3
           - TOPICS=tweet-topic,processed-topic 
           - ZK_CONNECT=kafka7zookeeper:2181/root/path
           - GROUP_ID=mymirror
