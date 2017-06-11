@@ -1,0 +1,5 @@
+cherrypy
+py4j
+kafka-python
+snappy
+lz4

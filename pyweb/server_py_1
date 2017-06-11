@@ -1,0 +1,49 @@
+# Import your application as:
+# from app import application
+# Example:
+
+from app import application
+
+# Import CherryPy
+import cherrypy
+import sys
+
+ip_address = "0.0.0.0"
+server_port=8080
+if not sys.argv[1:] :
+	print 'ip not defined; setting it to "0.0.0.0:80" '
+else :
+	ip_address = sys.argv[1]
+        server_port = sys.argv[2]
+
+print ip_address
+
+if __name__ == '__main__':
+
+    # Mount the application
+    cherrypy.tree.graft(application, "/")
+
+    # Unsubscribe the default server
+    cherrypy.server.unsubscribe()
+
+    # Instantiate a new server object
+    server = cherrypy._cpserver.Server()
+
+    # Configure the server object
+    server.socket_host = ip_address
+    server.socket_port = server_port
+    server.thread_pool = 30
+
+    # For SSL Support
+    # server.ssl_module            = 'pyopenssl'
+    # server.ssl_certificate       = 'ssl/certificate.crt'
+    # server.ssl_private_key       = 'ssl/private.key'
+    # server.ssl_certificate_chain = 'ssl/bundle.crt'
+
+    # Subscribe this server
+    server.subscribe()
+
+    # Start the server engine (Option 1 *and* 2)
+
+    cherrypy.engine.start()
+    cherrypy.engine.block()
