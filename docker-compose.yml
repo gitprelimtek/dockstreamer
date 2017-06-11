@@ -20,20 +20,14 @@ services:
            - back-end
    
     kafka:
-       image: spotify/kafka
-       volumes: 
-           - ./kafka:/kafka
+       image: blacktop/kafka
        ports: 
-           - "9092:9092" 
+           - "9092:9092"
+           - "2181:2181" 
        environment:
-          - ADVERTISED_HOST=0.0.0.0 
-          - ADVERTISED_PORT=9092
+          - KAFKA_ADVERTISED_HOST_NAME=192.168.99.100
           - CONSUMER_THREADS=3
-          - TOPICS=tweet-topic,processed-topic 
-          - ZK_CONNECT=kafka7zookeeper:2181/root/path
-          - GROUP_ID=mymirror
-#       command:
-#          - spotify/kafka
+          - KAFKA_CREATE_TOPICS=tweet-topic:1:1,processed-topic:1:1 
  
        networks:
            - back-end
