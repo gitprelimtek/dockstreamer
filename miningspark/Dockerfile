@@ -24,4 +24,4 @@ RUN echo $PATH
 ENV $PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # Define default command.
-ENTRYPOINT ["java", "-cp", "/streammining/target/spark-kafka-streamer-1.0-allinone.jar", "io.kaniu.spark.MainAllJobRunner","SENTIMENT_PROC","tweet-topic"]
+ENTRYPOINT ["java", "-cp", "/streammining/target/spark-kafka-streamer.jar", "io.kaniu.spark.MainAllJobRunner","SENTIMENT_PROC","tweet-topic"]
