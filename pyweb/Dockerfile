@@ -21,9 +21,8 @@ RUN pip install -r requirements.txt
 #ADD application.py /app/application.py
 ADD . /app
 
-EXPOSE 8088
+EXPOSE 8080
 
 WORKDIR /app
 
 CMD python server.py 
-
