@@ -6,6 +6,10 @@ MAINTAINER Kaniu Ndungu
 
 #RUN git version
 
+ENV APP_NAME test
+ENV KAFKA_TOPIC sometopic
+ENV THREADS 1
+ENV JAVA_OPTS -D:blah
 RUN uname -a
 
 WORKDIR /maven
@@ -24,4 +28,4 @@ RUN echo $PATH
 ENV $PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # Define default command.
-ENTRYPOINT ["java", "-cp", "/streammining/target/spark-kafka-streamer.jar", "io.kaniu.spark.MainAllJobRunner","SENTIMENT_PROC","tweet-topic"]
+ENTRYPOINT java $JAVA_OPTS -cp /streammining/target/spark-kafka-streamer.jar io.kaniu.spark.MainAllJobRunner $APP_NAME $KAFKA_TOPIC $THREADS
