@@ -2,7 +2,7 @@ FROM ubuntu:14.04
 
 MAINTAINER Kaniu Ndungu
 
-WORKDIR /app
+WORKDIR /
 
 RUN  apt-get update
 
@@ -14,15 +14,14 @@ RUN  apt-get update
 
 RUN sudo  -H pip install --upgrade pip
 
-ADD requirements.txt /app/requirements.txt
+ADD requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
-#ADD application.py /app/application.py
-ADD . /app
+RUN git clone -b develop https://github.com/kaniutest/miner_web.git
+
+WORKDIR /miner_web
 
 EXPOSE 8080
-
-WORKDIR /app
 
 CMD python server.py 

@@ -44,7 +44,7 @@ services:
        image: kaniu/web
        build: ./pyweb
        ports:
-         - "8888:8888"
+         - "8080:8080"
        links:
            - miningspark
            - sentimentspark
