@@ -1,37 +1,56 @@
 version: "2"
 
 services:
-    pyweb:
-       build: ./pyweb
-       ports:
-         - "8080"
-       links:
-           - pyspark
-           - kafka
-       networks:
-           - front-end
-
-    pyspark:
-       build: ./pyspark/.
-       hostname: pyspark
-       links: 
-           - kafka
-       networks:
-           - back-end
-   
     kafka:
        image: blacktop/kafka
-       ports: 
+       ports:
            - "9092:9092"
-           - "2181:2181" 
+           - "2181:2181"
        environment:
           - KAFKA_ADVERTISED_HOST_NAME=192.168.99.100
           - CONSUMER_THREADS=3
-          - KAFKA_CREATE_TOPICS=tweet-topic:1:1,processed-topic:1:1 
- 
+          - KAFKA_CREATE_TOPICS=tweet-topic:1:1,processed-topic:1:1
        networks:
            - back-end
- 
+
+    sentimentspark:
+       image: kaniu/sentimentspark
+       build: ./miningspark/.
+       environment:
+           - APP_NAME=SENTIMENT_PROC
+           - KAFKA_TOPIC=tweet-topic
+           - THREADS=1
+       links:
+           - kafka
+           - miningspark
+       networks:
+           - back-end
+    
+    miningspark:
+       image: kaniu/miningspark
+       build: ./miningspark/.
+       env_file:
+           - twitter-credentials.conf
+       environment:
+           - APP_NAME=TWEETSTREAM
+           - KAFKA_TOPIC=tweet-topic
+           - THREADS=1
+       links:
+           - kafka
+       networks:
+           - back-end
+
+    pyweb:
+       image: kaniu/web
+       build: ./pyweb
+       ports:
+         - "8888:8888"
+       links:
+           - miningspark
+           - sentimentspark
+           - kafka
+       networks:
+           - front-end 
 networks:
        front-end:
        back-end:
